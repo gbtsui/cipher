@@ -1,9 +1,14 @@
 import { program } from "commander";
 import chalk from "chalk";
 import * as readline from "readline";
-import {exec} from "node:child_process"
 import fs from "node:fs/promises";
 import path from "node:path"
+
+import addslashes from "./dev-utils/add-slashes"
+
+import help from "./commands/help"
+import { GetCipherConfigs, ListCiphers } from "./dev-utils/config-loader";
+import { Cipher } from "./types";
 
 console.log("hello world!");
 
@@ -41,7 +46,7 @@ async function startInteractiveMode() {
 
         switch (command) {
             case "help":
-                printHelp();
+                help();
                 break;
             case "exit":
                 exit();
@@ -50,10 +55,30 @@ async function startInteractiveMode() {
                 biofuel();
                 break;
             case "list-ciphers":
-                listCiphers();
+                await ListCiphers();
                 break;
             case "load-config":
-                loadConfig();
+                //await loadConfig();
+                break;
+            case "get-cipher":
+                await GetCipherConfigs(args[1]);
+                break;
+            case "encode":
+                const ciphers: Array<Cipher> | null | undefined = await GetCipherConfigs(args[1]);
+                
+                if (!ciphers) {
+                    return
+                }
+
+                let result: string = addslashes(args.slice(2).join(" "));
+                
+
+                ciphers.forEach(cipher => {
+                    result = cipher.encode(result)
+                })
+                    
+                //let result = ciphers[0].encode(args.slice(2).join(" "))
+                console.log(result);
                 break;
             default:
                 console.log(chalk.red("command not found! run " + chalk.blue("help") + chalk.red(" to find a list of available commands.")))
@@ -64,6 +89,7 @@ async function startInteractiveMode() {
 
 }
 
+/*
 async function loadConfig() {
     try {
         const configPath = path.join(__dirname, "../config/config.json")
@@ -75,6 +101,8 @@ async function loadConfig() {
                 "skibidi": true
             }
             await fs.writeFile(configPath, JSON.stringify(defaultConfigData));
+            console.log("config file written.")
+            return
         } else {
             console.log(await fs.readFile(configPath, "utf8"));
             return;
@@ -83,22 +111,7 @@ async function loadConfig() {
         console.error(error)
     }
 }
-
-async function listCiphers() {
-    const files = await fs.readdir(path.join(__dirname, "../config"))
-    files.forEach(file => {
-        console.log(file)
-    })
-    return;
-}
-
-function printHelp() {
-    console.log(chalk.blue("help! \n"))
-
-    console.log(chalk.greenBright("help") + "\n\twhat you're seeing rn.")
-    console.log(chalk.greenBright("create-encryption-system") + "\n\tcreate an encryption system!!!")
-}
-
+*/
 function exit() {
     console.log(chalk.green("thanks for using this tool!"))
     process.exit(0)
