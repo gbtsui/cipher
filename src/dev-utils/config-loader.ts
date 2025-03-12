@@ -4,6 +4,7 @@ import chalk from "chalk"
 
 import { AlphabetList, Cipher, CipherConfiguration } from "../types"
 import { CaesarCipher } from "../functions/caesar"
+import { SubstitutionCipher } from "../functions/substitution"
 
 export async function ListCiphers() {
     const files = await fs.readdir(path.join(__dirname, "../../config"))
@@ -46,7 +47,7 @@ export async function GetCipherConfigs(name: string) {
                 ciphers.push(new CaesarCipher(configuration, alphabets))
                 break;
             case "substitution":
-                console.log("substitution cipher :3 " + chalk.red("NOT IMPLEMENTED YET AAAA"))
+                ciphers.push(new SubstitutionCipher(configuration))
                 break;
             default:
                 throw new Error(`No cipher type ${configuration.type} found. Did you misspell something?`)
