@@ -13,6 +13,6 @@ export interface CaesarCipherConfiguration extends CipherConfiguration {
 export type AlphabetList = Array<Array<string>>
 
 export interface Cipher {
-    encode(data: string): string
-    decode(data: string): string
+    encode(data: string, moreVerbose: boolean): string
+    decode(data: string, moreVerbose: boolean): string
 }

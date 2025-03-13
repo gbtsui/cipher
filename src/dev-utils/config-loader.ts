@@ -6,28 +6,30 @@ import { AlphabetList, Cipher, CipherConfiguration } from "../types"
 import { CaesarCipher } from "../functions/caesar"
 import { SubstitutionCipher } from "../functions/substitution"
 
-export async function ListCiphers() {
-    const files = await fs.readdir(path.join(__dirname, "../../config"))
+export async function ListCipherFiles() {
+    const files = await fs.readdir(path.join(__dirname, "../../config/ciphers/"));
+
+    let result: Array<string> = []
+
     files.forEach(file => {
-        console.log(chalk.blue(file.split(".")[0]))
+        if (file.includes(".json")) {
+            result.push(file.split(".")[0])
+        }
     })
-    return;
+    return result
 }
 
 export async function GetCipherConfigs(name: string) {
-    if (name === undefined || name === null || name === "") {
-        console.log(chalk.red(`Please provide a cipher name!!`))
-        return
-    }
     const filePath = path.join(__dirname, "../../config/ciphers/" + name + ".json")
-    console.log(`Reading cipher from ${filePath}.`)
+    console.log(chalk.gray(`Reading cipher from ${filePath}.`))
+    /*
     const fileExists: boolean = await fs.access(filePath).then(() => true).catch(() => false)
     
     if (!fileExists) {
         console.log(chalk.red(`Cipher ${name} not found!!! Are you sure you have the right name?`))
         return null
     }
-
+*/
     const config: {ciphers: Array<CipherConfiguration>, alphabets: Array<string>} = JSON.parse(await fs.readFile(filePath, "utf8"))
     
     let alphabets: AlphabetList = []
