@@ -6,3 +6,5 @@ else
     bash ./build;
     node ./dist/index.js
 fi
+
+# hi!!!!!
