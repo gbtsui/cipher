@@ -20,7 +20,7 @@ export class SubstitutionCipher implements Cipher {
         let result: string = ""
         const keys = Object.keys(this.key).sort((a,b) => b.length - a.length)
         const dataArray = (this.caseSensitive? data : data.toLowerCase()).split("")
-        while (i < data.length) {
+        while (i < dataArray.length) {
             let matched = false;
 
             for (const char of keys) {
@@ -47,8 +47,46 @@ export class SubstitutionCipher implements Cipher {
         return result
     }
 
-    public decode(data: string) {
+    private swapKeys(object: { [key: string] : string}) {
+        let result: {[key: string] : string} = {}
+        for (const key in object) {
+            result[object[key]] =  key
+        }
+        return result
+    }
 
-        return "UNFINISHED"
+    public decode(data: string) {
+        let i: number = 0;
+        let result: string = ""
+        const swappedKeys = this.swapKeys(this.key)
+        console.log(swappedKeys)
+        const keys = Object.keys(swappedKeys).sort((a,b) => b.length - a.length)
+        console.log(keys)
+        const dataArray = (this.caseSensitive? data : data.toLowerCase()).split("")
+        while (i < dataArray.length) {
+            let matched = false;
+
+            for (const char of keys) {
+                if (dataArray.slice(i, i+char.length).join("") === char) {
+                    if (this.moreVerbose) {
+                        console.log(chalk.gray(`Replaced character(s) `) + chalk.blue(`"${dataArray.slice(i, i+char.length).join("")}"`) + chalk.gray(` with `) + chalk.green(`"${char}"`))
+                    }
+                    result += swappedKeys[char];
+                    i += char.length;
+                    matched = true;
+                    break;
+                }
+            }
+            
+            if (!matched) {
+                if (this.moreVerbose) {
+                    console.log(chalk.gray("Character ") + chalk.red(dataArray[i]) + chalk.gray(" not found in table."))
+                }
+                result += dataArray[i]
+                i += 1
+            }
+        }
+
+        return result
     }
 }

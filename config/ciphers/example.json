@@ -30,7 +30,7 @@
                 "p": "ρ",
                 "q": "ԛ",
                 "r": "я",
-                "s": "Ϟ",
+                "s": "ϟ",
                 "t": "τ",
                 "u": "υ",
                 "v": "в",
@@ -49,14 +49,14 @@
                 "kn": "κи",
                 "wh": "ψ"
             },
-            "caseSensitive": false
+            "caseSensitive": true
         },
         {
             "type":"caesar",
             "key": {
                 "shift":3
             },
-            "caseSensitive": false
+            "caseSensitive": true
         }
     ]
 }
