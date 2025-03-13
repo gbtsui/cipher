@@ -59,9 +59,7 @@ export class SubstitutionCipher implements Cipher {
         let i: number = 0;
         let result: string = ""
         const swappedKeys = this.swapKeys(this.key)
-        console.log(swappedKeys)
         const keys = Object.keys(swappedKeys).sort((a,b) => b.length - a.length)
-        console.log(keys)
         const dataArray = (this.caseSensitive? data : data.toLowerCase()).split("")
         while (i < dataArray.length) {
             let matched = false;
