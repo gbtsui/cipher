@@ -1,7 +1,8 @@
 export interface CipherConfiguration {
     type: string,
     key: {},
-    caseSensitive?: boolean
+    caseSensitive?: boolean,
+    moreVerbose: boolean
 }
 
 export interface CaesarCipherConfiguration extends CipherConfiguration {
@@ -13,6 +14,7 @@ export interface CaesarCipherConfiguration extends CipherConfiguration {
 export type AlphabetList = Array<Array<string>>
 
 export interface Cipher {
-    encode(data: string, moreVerbose: boolean): string
-    decode(data: string, moreVerbose: boolean): string
+    encode(data: string): string
+    decode(data: string): string
+    setVerbosity(newValue: boolean): void
 }

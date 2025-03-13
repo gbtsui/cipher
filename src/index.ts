@@ -155,7 +155,8 @@ async function startInteractiveMode() {
             const verbose = (options.indexOf("verbose") != -1) ? true : false;
 
             ciphers.forEach(cipher => {
-                text = cipher.encode(text, moreVerbose)
+                cipher.setVerbosity(moreVerbose)
+                text = cipher.encode(text)
                 if (verbose && (ciphers.indexOf(cipher) + 1) < ciphers.length) {
                     console.log(chalk.green(`result after pass ${ciphers.indexOf(cipher) + 1}: \n`) + text)
                 }

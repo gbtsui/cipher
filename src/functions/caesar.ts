@@ -27,14 +27,16 @@ export async function DecipherCaesar(input: string, shift: number) {
 }
     */
 
-import {Cipher, CipherConfiguration} from "../types"
+import chalk from "chalk";
+import {AlphabetList, Cipher, CipherConfiguration} from "../types"
 
 export class CaesarCipher implements Cipher {
     private key: number = 0;
     private caseSensitive: boolean = false
-    private alphabets: Array<Array<string>> = []
+    private alphabets: AlphabetList = []
+    private moreVerbose: boolean = false
 
-    constructor(config: CipherConfiguration, alphabets: Array<Array<string>>) {
+    constructor(config: CipherConfiguration, alphabets: AlphabetList) {
         if ("shift" in config.key){
             this.key = config.key.shift as number
         } else {
@@ -44,6 +46,10 @@ export class CaesarCipher implements Cipher {
         }
         this.caseSensitive = config.caseSensitive ? config.caseSensitive : false
         this.alphabets = alphabets
+    }
+
+    public setVerbosity(newValue: boolean): void {
+        this.moreVerbose = newValue
     }
 
     private remapAlphabet(encrypt: boolean = true): {[key: string] : string} {
@@ -64,8 +70,14 @@ export class CaesarCipher implements Cipher {
         let result: string = ""
         for (const char of cleanedData) {
             if (alphabet[char]) {
+                if (this.moreVerbose) {
+                    console.log(chalk.gray(`Shifted `) + chalk.blue(char) + chalk.gray(` to `) + chalk.green(alphabet[char]) )
+                }
                 result += alphabet[char]
             } else {
+                if (this.moreVerbose) {
+                    console.log(chalk.gray(`Character `) + chalk.red(char) + chalk.gray(` not found in alphabet.`))
+                }
                 result += char
             }
         }
@@ -77,7 +89,7 @@ export class CaesarCipher implements Cipher {
         const alphabet = this.remapAlphabet(false)
         const cleanedData = this.caseSensitive? data : data.toLowerCase()
         let result: string = ""
-        for (const char of data) {
+        for (const char of cleanedData) {
             if (alphabet[char]) {
                 result += alphabet[char]
             } else {
