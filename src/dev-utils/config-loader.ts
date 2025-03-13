@@ -34,6 +34,11 @@ export async function GetCipherConfigs(name: string) {
     
     let alphabets: AlphabetList = []
 
+    if (!config.alphabets) {
+        //console.log(chalk.red(`Cipher ${name} seems to not contain any alphabets...`))
+        return;
+    }
+
     for (const alphabet of config.alphabets) {
         const charsetFilePath = path.join(__dirname, "../../config/charsets/" + alphabet + ".json")
         await fs.readFile(charsetFilePath, "utf8")

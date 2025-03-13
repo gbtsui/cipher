@@ -84,7 +84,7 @@ async function startInteractiveMode() {
                 })
             })
 
-            const ciphers: Array < Cipher > = await GetCipherConfigs(cipher_selection)
+            const ciphers: Array < Cipher > | undefined = await GetCipherConfigs(cipher_selection)
             if (!ciphers) {
                 console.log(chalk.red("cipher file seems to be empty... maybe try editing it?"))
                 startInteractiveMode()
@@ -154,7 +154,7 @@ async function startInteractiveMode() {
             const moreVerbose = (options.indexOf("moreVerbose") != -1) ? true : false;
             const verbose = (options.indexOf("verbose") != -1) ? true : false;
 
-            ciphers.forEach(cipher => {
+            ciphers?.forEach(cipher => {
                 cipher.setVerbosity(moreVerbose)
                 text = cipher.encode(text)
                 if (verbose && (ciphers.indexOf(cipher) + 1) < ciphers.length) {
@@ -169,6 +169,8 @@ async function startInteractiveMode() {
                 console.log(`file written to ${outputFilePath}`)
             }
 
+            break;
+        case "decode":
             break;
         default:
             console.log(chalk.red("command not found! run " + chalk.blue("help") + chalk.red(" to find a list of available commands.")))
