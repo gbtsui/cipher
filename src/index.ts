@@ -17,9 +17,6 @@ import {
 import {
     Cipher
 } from "./types";
-import {
-    file
-} from "googleapis/build/src/apis/file";
 import path from "node:path"
 
 console.log("hello world!");
